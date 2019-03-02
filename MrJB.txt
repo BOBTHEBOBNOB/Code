@@ -1,0 +1,73 @@
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
+using Terraria;
+using Terraria.ID;
+using Terraria.ModLoader;
+
+namespace ModdedGlory.NPCs
+{
+    [AutoloadHead]
+    public class MrJB : ModNPC
+    {
+        public override string Texture => "ModdedGlory/NPCs/MrJB";
+
+
+            public override bool Autoload(ref string name) {
+                name = "MrJB";
+                return mod.Properties.Autoload;
+            }
+
+            public override void SetDefaults()
+        {
+            npc.townNPC = true; //This defines if the npc is a town Npc or not
+            npc.friendly = true;  //this defines if the npc can hur you or not()
+            npc.width = 18; //the npc sprite width
+            npc.height = 46;  //the npc sprite height
+            npc.aiStyle = 7; //this is the npc ai style, 7 is Pasive Ai
+            npc.defense = 205;  //the npc defense
+            npc.lifeMax = 2500;// the npc life
+            npc.HitSound = SoundID.NPCHit1;  //the npc sound when is hit
+            npc.DeathSound = SoundID.NPCDeath1;  //the npc sound when he dies
+            npc.knockBackResist = 5.5f;  //the npc knockback resistance
+            animationType = NPCID.Guide;
+
+            public override void SetStaticDefaults()
+
+            Main.npcFrameCount[npc.type] = 26; //this defines how many frames the npc sprite sheet has
+            NPCID.Sets.ExtraFramesCount[npc.type] = 0;
+            NPCID.Sets.HatOffsetY[npc.type] = 4; //this defines the party hat position
+            animationType = NPCID.Guide;  //this copy the cyborg animation
+        }
+        public override string TownNPCName()     //Allows you to give this town NPC any name when it spawns
+        {
+            switch (WorldGen.genRand.Next(1))
+            {
+                case 0:
+                    return "Jacob Strongman";
+                default:
+                    return "Mr Jacob";
+            }
+        }
+
+        public override void SetChatButtons(ref string button, ref string button2)  //Allows you to set the text for the buttons that appear on this town NPC's chat window.
+        {
+            button = "Buy Weapon";   //this defines the buy button name
+        }
+        public override void OnChatButtonClicked(bool firstButton, ref bool openShop) //Allows you to make something happen whenever a button is clicked on this town NPC's chat window. The firstButton parameter tells whether the first button or second button (button and button2 from SetChatButtons) was clicked. Set the shop parameter to true to open this NPC's shop.
+        {
+
+            if (firstButton)
+            {
+                openShop = true;   //so when you click on buy button opens the shop
+            }
+        }
+            public override void SetupShop(int type, Chest shop, ref int nextSlot)
+            {
+                if (type == NPCID.Dryad)
+                {
+                    shop.item[nextSlot].SetDefaults(mod.ItemType<Items.UltraSword>());
+                    nextSlot++;
+                }
+            }
+        }
+    }
